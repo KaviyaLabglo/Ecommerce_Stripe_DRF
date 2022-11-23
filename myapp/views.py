@@ -1,21 +1,29 @@
 
-
-from myapp.models import Product, Cart, Wishlist, Order, Payment
-from myapp.serializers import ProductSerializer, CartSerializer, WishlistSerializer,  OrderSerializer
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-
-from django.shortcuts import redirect
-
-from django.conf import settings
-
 from rest_framework.response import Response
 from rest_framework import status
 import stripe
 
+from django.shortcuts import redirect
+from django.conf import settings
 import json
+
+from myapp.models import(
+    Product,
+    Cart, 
+    Wishlist, 
+    Order, 
+    Payment
+)
+from myapp.serializers import (ProductSerializer, 
+    CartSerializer,
+    WishlistSerializer, 
+    OrderSerializer
+    )
+
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -27,6 +35,9 @@ class cartlist(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user, selling_price = serializer.validated_data['product'].price) 
     
   
 class wishlistView(viewsets.ModelViewSet):
@@ -87,11 +98,8 @@ class payment(APIView):
                     }
                 ],
             
-           # metadata = {"order_id": o.id},
             mode='payment',
         )
-       # print(checkout_session)
-        #Payment.objects.create(email = "aaa@gmail.com", amount =0 , paid_status =False, transaction_id =checkout_session["id"] ,order_id = )
         return redirect(checkout_session.url, code = 303)
     
     
