@@ -47,7 +47,6 @@ class Cart(TimeStampModel):
     quantity = models.IntegerField()
     selling_price = models.IntegerField()
     is_active = models.BooleanField(default=True)
-    addcart_by = models.CharField(max_length=200)
 
     def __str__(self):
         return "{} ".format(self.id)
