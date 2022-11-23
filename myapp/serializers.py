@@ -28,10 +28,10 @@ class CartSerializer(serializers.ModelSerializer):
         
         
 
-class  WishlistSerializer(serializers.ModelSerializer):
+class  WishlistSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Wishlist
-        fields = "__all__"
+        fields =["product"]
         
     
 class  OrderSerializer(serializers.ModelSerializer):
