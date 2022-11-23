@@ -63,16 +63,16 @@ class Order(TimeStampModel):
 
 
 class Wishlist(TimeStampModel):
-    user1 = models.ForeignKey(User, on_delete=models.CASCADE)
-    product1 = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.IntegerField()
-    is_active1 = models.BooleanField(default=True)
+    
 
     def __str__(self):
         return "{} ".format(self.id)
     
 class Payment(TimeStampModel):
-    transaction_id = models.TextField(max_length=200)
+    transactionid = models.TextField(max_length=200)
     paid_status =  models.BooleanField(default=False)
     amount = models.IntegerField()
     email = models.EmailField()

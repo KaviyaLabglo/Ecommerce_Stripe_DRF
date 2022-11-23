@@ -17,7 +17,7 @@ class ord(admin.ModelAdmin):
 admin.site.register(Order,ord)
 
 class a(admin.ModelAdmin):
-    list_display = ('id','user1', 'product1','price', 'is_active1' )
+    list_display = ('id','user', 'product','price')
 admin.site.register(Wishlist,a)
 
 
