@@ -14,17 +14,17 @@ class BrandSerializer(serializers.HyperlinkedModelSerializer):
         fields = "__all__"
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
-        fields = ["title","color", "price", "id", "brand"]
+        fields = ["title","color", "price", "id"]
         
 
 
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
-        fields = ["product", "quantity", "is_active"]
+        fields = ["product", "quantity", "is_active", "id"]
         
         
 
