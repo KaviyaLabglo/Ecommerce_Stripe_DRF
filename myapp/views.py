@@ -58,18 +58,18 @@ class wishlistView(viewsets.ModelViewSet):
 
 class create_checkout_session(APIView):
     query_set = Payment
+    permission_classes = [IsAuthenticated]
     def post(self, request, format=None):
         domain_url = 'http://localhost:8000/'
-        
+        print(request.user)
         cart_product = Cart.objects.filter(
                 Q(user_id= 1) & Q(is_active=True))
         
         
-        total_price = Cart.objects.filter(Q(user = User.objects.get(id = 1)) & Q(
-             is_active=True)).aggregate(tot=Sum(F('selling_price') * F('quantity')))
+        total_price = Cart.objects.filter(Q(user = User.objects.get(id = request.user.id)) & Q(is_active=True)).aggregate(tot=Sum(F('selling_price') * F('quantity')))
         print(total_price)
         
-        o = Order.objects.create(order_status = 2, order_user_id = User.objects.get(id = 1).id, total_order_amount = 0)
+        o = Order.objects.create(order_status = 2, order_user_id = User.objects.get(id = request.user.id).id, total_order_amount = 0)
         o.product.add(*cart_product)
         
         checkout_session = stripe.checkout.Session.create(
@@ -99,8 +99,6 @@ class webhook_success(APIView):
         payload = request.body.decode('utf-8')
         endpoint_secret = settings.STRIPE_SECRET_KEY 
         event = json.loads(payload)
-        
-        
         if event['type'] == 'checkout.session.completed':
             session = event['data']['object']
             transaction_id = session['id']
